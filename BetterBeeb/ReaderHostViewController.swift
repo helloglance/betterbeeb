@@ -48,10 +48,10 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 		pageCounter = SlimPageControl()
 		pageController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
 
-		headerBar.setTranslatesAutoresizingMaskIntoConstraints(false)
-		sectionTitle.setTranslatesAutoresizingMaskIntoConstraints(false)
-		pageCounter.setTranslatesAutoresizingMaskIntoConstraints(false)
-		pageController.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+		headerBar.translatesAutoresizingMaskIntoConstraints = false
+		sectionTitle.translatesAutoresizingMaskIntoConstraints = false
+		pageCounter.translatesAutoresizingMaskIntoConstraints = false
+		pageController.view.translatesAutoresizingMaskIntoConstraints = false
 
 		headerBar.backgroundColor = UIColor.beebStoryBackground()
 
@@ -67,13 +67,13 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 
 		let viewsDictionary = ["headerBar" : headerBar, "sectionTitle" : sectionTitle, "pageCounter" : pageCounter, "pageControllerView" : pageController.view]
 
-		headerBar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==8)-[sectionTitle]-(>=1)-[pageCounter]-(==4)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		headerBar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[sectionTitle]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		headerBar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[pageCounter]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		headerBar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==8)-[sectionTitle]-(>=1)-[pageCounter]-(==4)-|", options: [], metrics: nil, views: viewsDictionary))
+		headerBar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[sectionTitle]|", options: [], metrics: nil, views: viewsDictionary))
+		headerBar.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[pageCounter]|", options: [], metrics: nil, views: viewsDictionary))
 
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[headerBar]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[pageControllerView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[headerBar(==22)][pageControllerView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[headerBar]|", options: [], metrics: nil, views: viewsDictionary))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[pageControllerView]|", options: [], metrics: nil, views: viewsDictionary))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[headerBar(==22)][pageControllerView]|", options: [], metrics: nil, views: viewsDictionary))
 	}
 
     override func viewDidLoad() {
@@ -81,7 +81,7 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 
 		// the original app has both font size adjust and share buttons, but our "Better Beeb" logo is bigger than theirs
 		// so there isn't enough width for us to have font size adjustment
-		let fontAdjustButton = UIBarButtonItem(barButtonSystemItem: .Search, target: self, action: Selector("adjustTextSizeTapped"))
+		
 		let shareButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: Selector("shareTapped"))
 		navigationItem.rightBarButtonItems = [shareButton]
 
@@ -93,7 +93,7 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 		pageCounter.currentPageIndicatorTintColor = UIColor.beebRed()
 		pageCounter.userInteractionEnabled = false
 
-		if let currentIndex = find(section.stories, story) {
+		if let currentIndex = section.stories.indexOf( story) {
 			self.pageCounter.currentPage = currentIndex
 		} else {
 			self.pageCounter.currentPage = -1
@@ -158,16 +158,16 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 		pasteboard.URL = NSURL(string: story.linkHref)
 	}
 
-	func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+	 func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
 		controller.dismissViewControllerAnimated(true, completion: nil)
 	}
 
 	// MARK: - UIPageViewController data source
 
 	func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-		let contentViewController = viewController as ReaderContentViewController
+		let contentViewController = viewController as! ReaderContentViewController
 
-		if let currentIndex = find(section.stories, contentViewController.story) {
+		if let currentIndex = section.stories.indexOf( contentViewController.story) {
 			if currentIndex > 0 {
 				let vc = ReaderContentViewController()
 				vc.story = section.stories[currentIndex - 1]
@@ -179,9 +179,9 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 	}
 
 	func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-		let contentViewController = viewController as ReaderContentViewController
+		let contentViewController = viewController as! ReaderContentViewController
 
-		if let currentIndex = find(section.stories, contentViewController.story) {
+		if let currentIndex = section.stories.indexOf( contentViewController.story) {
 			if currentIndex < section.stories.count - 1 {
 				let vc = ReaderContentViewController()
 				vc.story = section.stories[currentIndex + 1]
@@ -192,11 +192,11 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 		return nil
 	}
 
-	func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+	func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject?], transitionCompleted completed: Bool) {
 		if !completed { return }
 
-		let currentVC = self.pageController.viewControllers.last as ReaderContentViewController
-		if let currentIndex = find(section.stories, currentVC.story) {
+		let currentVC = self.pageController.viewControllers!.last as! ReaderContentViewController
+		if let currentIndex = section.stories.indexOf( currentVC.story) {
 			self.pageCounter.currentPage = currentIndex
 		} else {
 			self.pageCounter.currentPage = -1

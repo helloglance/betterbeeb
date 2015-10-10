@@ -58,7 +58,7 @@ public extension String {
 	}
 
 	func stringByReplacingFirstOccurrenceOfString(search: NSString, withString replacement: String) -> String {
-		let range = (self as NSString).rangeOfString(search)
+		let range = (self as NSString).rangeOfString(search as String)
 
 		if (range.location != NSNotFound) {
 			return (self as NSString).stringByReplacingCharactersInRange(range, withString: replacement)
@@ -69,14 +69,14 @@ public extension String {
 }
 
 func downloadImage(url: NSURL, handler: ((image: UIImage, NSError!) -> Void)) {
-	var imageRequest: NSURLRequest = NSURLRequest(URL: url)
+	let imageRequest: NSURLRequest = NSURLRequest(URL: url)
 	NSURLConnection.sendAsynchronousRequest(imageRequest,
 		queue: NSOperationQueue.mainQueue(),
 		completionHandler:{response, data, error in
 
 			if data != nil {
 				dispatch_async(dispatch_get_main_queue()) {
-					handler(image: UIImage(data: data), error)
+					handler(image: UIImage(data: data!)!, error)
 				}
 			}
 	})
@@ -84,15 +84,15 @@ func downloadImage(url: NSURL, handler: ((image: UIImage, NSError!) -> Void)) {
 
 func stringFromResource(name: String) -> String {
 	let path = NSBundle.mainBundle().pathForResource(name, ofType: nil)
-	let str:NSString = NSString(contentsOfFile: path!, usedEncoding: nil, error: nil)
+	let str:NSString = try! NSString(contentsOfFile: path!, usedEncoding: nil)
 
-	return str
+	return str as String
 }
 
-func getDocumentsDirectory() -> String {
+func getDocumentsDirectory() -> NSURL {
 	let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
-	let documentsDirectory = paths[0] as String
-	return documentsDirectory
+    let documentsDirectory = NSURL( string:paths[0] as! String)
+	return documentsDirectory!
 }
 
 

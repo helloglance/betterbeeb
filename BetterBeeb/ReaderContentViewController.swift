@@ -35,21 +35,22 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 		super.loadView()
 
 		webView = UIWebView()
-		webView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		webView.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(webView)
 
 		webView.delegate = self
 		webView.backgroundColor = UIColor.beebStoryBackground()
 
 		let viewsDictionary = ["webView" : webView]
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[webView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[webView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+        //let constraint1 =
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[webView]|", options: [], metrics: nil, views: viewsDictionary))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[webView]|", options: [], metrics: nil, views: viewsDictionary))
 	}
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		var template = stringFromResource("template.html")
+		let template = stringFromResource("template.html")
 
 		var titleString = "<h1>\(story.title)</h1>"
 		var formattedDate: String! = nil
@@ -82,12 +83,12 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 			formattedDate = dateFormatter.stringFromDate(story.updated) + " GMT"
 		}
 
-		var lastUpdatedString = "Last updated \(formattedDate)"
+		let lastUpdatedString = "Last updated \(formattedDate)"
 
-		let dateComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear, fromDate: NSDate())
+		let dateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.NSYearCalendarUnit, fromDate: NSDate())
 
-		var html = NSString(format: template, "", "iPhone", "", "", titleString, lastUpdatedString, story.content, "BBC &copy; \(dateComponents.year)")
-		webView.loadHTMLString(html, baseURL: NSBundle.mainBundle().resourceURL)
+		let html = NSString(format: template, "", "iPhone", "", "", titleString, lastUpdatedString, story.content, "BBC &copy; \(dateComponents.year)")
+		webView.loadHTMLString(html  as String, baseURL: NSBundle.mainBundle().resourceURL)
     }
 
 	override func viewWillAppear(animated: Bool) {
@@ -105,7 +106,7 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 	}
 
 	func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-		if let urlString: NSString = request.URL.absoluteString {
+		if let urlString: NSString = request.URL!.absoluteString {
 			if urlString.hasPrefix("bbcvideo://") {
 				let idx = urlString.rangeOfString("bbc.co.uk").location
 				var url: NSString = "http://" + urlString.substringFromIndex(idx)
@@ -113,16 +114,18 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 				url = url.stringByReplacingOccurrencesOfString("%7bbandwidth%7d", withString: "wifi")
 
 				var err: NSErrorPointer = nil
-				let str: NSString! = NSString(contentsOfURL: NSURL(string: url), usedEncoding: nil, error: err)
+				let str: NSString! = try! String(contentsOfURL: NSURL(string: url as String)!, usedEncoding: nil)
 
 				if err != nil || str == nil {
-					let ac = UIAlertController(title: "Playback error", message: "There was a problem playing the movie; please check your connection and try again.", preferredStyle: .Alert)
+		
+                    
+                let ac = UIAlertController(title: "Playback error", message: "There was a problem playing the movie; please check your connection and try again.", preferredStyle: .Alert)
 					ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
 					presentViewController(ac, animated: true, completion: nil)
 					return false
 				}
 
-				let vc = MPMoviePlayerViewController(contentURL: NSURL(string: str))
+				let vc = MPMoviePlayerViewController(contentURL: NSURL(string: str as String))
 				presentMoviePlayerViewControllerAnimated(vc)
 
 				return false
@@ -131,7 +134,7 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 
 		if navigationType == .LinkClicked {
 			// any other types of links we want to open externally
-			UIApplication.sharedApplication().openURL(request.URL)
+			UIApplication.sharedApplication().openURL(request.URL!)
 			return false
 		}
 

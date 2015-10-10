@@ -41,9 +41,9 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		title = aDecoder.decodeObjectForKey("title") as String
-		feedURL = aDecoder.decodeObjectForKey("feedURL") as String
-		stories = aDecoder.decodeObjectForKey("stories") as [Story]
+		title = aDecoder.decodeObjectForKey("title") as! String
+		feedURL = aDecoder.decodeObjectForKey("feedURL") as! String
+		stories = aDecoder.decodeObjectForKey("stories") as! [Story]
 
 		super.init()
 
@@ -59,16 +59,21 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 	}
 
 	func update() -> Bool {
+        
+        do {
 		if isUpdating { return true }
 
 		isUpdating = true
 
-		var url = NSURL(string: self.feedURL)
+		let url = NSURL(string: self.feedURL)
 
-		var err: NSErrorPointer = nil
-		var contents: NSString! = NSString(contentsOfURL: url, usedEncoding: nil, error: err)
+		let err: NSErrorPointer = nil
+   
+        var contents:NSString
+        contents =  try NSString(contentsOfURL: url!, encoding: NSUTF8StringEncoding)
+        
 
-		if contents == nil || err != nil {
+		if  err != nil {
 			// failed to fetch any content for some reason
 			isUpdating = false
 			return false
@@ -84,7 +89,9 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 			xmlParser.delegate = self
 
 			self.tempStories = [Story]()
-			xmlParser.parse()
+            if xmlParser.parse() == true {
+                print("success")
+            }
 			stories = tempStories
 
 			isUpdating = false
@@ -93,11 +100,17 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 		}
 
 		isUpdating = false
-
+            
+            
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
 		return false
+      
+        
 	}
 
-	func parser(parser: NSXMLParser, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+	  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
 		if (elementName == "entry") {
 			let story: Story = Story(parentSection: self, parser: parser)
 			tempStories.append(story)

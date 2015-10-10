@@ -73,7 +73,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		createTableFooter()
 
 		loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-		loadingSpinner.setTranslatesAutoresizingMaskIntoConstraints(false)
+		loadingSpinner.translatesAutoresizingMaskIntoConstraints = false
 		loadingSpinner.hidesWhenStopped = true
 		loadingSpinner.startAnimating()
 		tableView.addSubview(loadingSpinner)
@@ -82,7 +82,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		tableView.addConstraint(NSLayoutConstraint(item: loadingSpinner, attribute: .CenterY, relatedBy: .Equal, toItem: tableView, attribute: .CenterY, multiplier: 1, constant: 0))
 
 		errorMessage = UILabel()
-		errorMessage.setTranslatesAutoresizingMaskIntoConstraints(false)
+		errorMessage.translatesAutoresizingMaskIntoConstraints = false
 		errorMessage.numberOfLines = 0
 		errorMessage.textColor = UIColor.whiteColor()
 		errorMessage.textAlignment = .Center
@@ -91,7 +91,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		errorMessage.hidden = true
 		tableView.addSubview(errorMessage)
 
-		tableView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==30)-[errorMessage]-(==30)-|", options: .allZeros, metrics: nil, views: ["errorMessage" : errorMessage]))
+		tableView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==30)-[errorMessage]-(==30)-|", options: [], metrics: nil, views: ["errorMessage" : errorMessage]))
 		tableView.addConstraint(NSLayoutConstraint(item: errorMessage, attribute: .CenterY, relatedBy: .Equal, toItem: tableView, attribute: .CenterY, multiplier: 1, constant: 0))
 	}
 
@@ -110,17 +110,17 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 		let copyright = UILabel()
 
-		firstRow.setTranslatesAutoresizingMaskIntoConstraints(false)
-		secondRow.setTranslatesAutoresizingMaskIntoConstraints(false)
-		thirdRow.setTranslatesAutoresizingMaskIntoConstraints(false)
+		firstRow.translatesAutoresizingMaskIntoConstraints = false
+		secondRow.translatesAutoresizingMaskIntoConstraints = false
+		thirdRow.translatesAutoresizingMaskIntoConstraints = false
 
-		sendPhoto.setTranslatesAutoresizingMaskIntoConstraints(false)
-		sendStory.setTranslatesAutoresizingMaskIntoConstraints(false)
-		help.setTranslatesAutoresizingMaskIntoConstraints(false)
-		terms.setTranslatesAutoresizingMaskIntoConstraints(false)
-		privacy.setTranslatesAutoresizingMaskIntoConstraints(false)
+		sendPhoto.translatesAutoresizingMaskIntoConstraints = false
+		sendStory.translatesAutoresizingMaskIntoConstraints = false
+		help.translatesAutoresizingMaskIntoConstraints = false
+		terms.translatesAutoresizingMaskIntoConstraints = false
+		privacy.translatesAutoresizingMaskIntoConstraints = false
 
-		copyright.setTranslatesAutoresizingMaskIntoConstraints(false)
+		copyright.translatesAutoresizingMaskIntoConstraints = false
 
 		sendPhoto.addTarget(self, action: Selector("sendPhotoTapped"), forControlEvents: .TouchUpInside)
 		sendStory.addTarget(self, action: Selector("sendStoryTapped"), forControlEvents: .TouchUpInside)
@@ -134,19 +134,25 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		terms.titleLabel?.textColor = UIColor.whiteColor()
 		privacy.titleLabel?.textColor = UIColor.whiteColor()
 
-		sendPhoto.setTitle("Send Photo", forState: .Normal)
-		sendStory.setTitle("Send Story", forState: .Normal)
-		help.setTitle("Help", forState: .Normal)
-		terms.setTitle("Terms of use", forState: .Normal)
-		privacy.setTitle("Privacy", forState: .Normal)
-
+         //sendPhoto.titleLabel?.enabled = true;
+		//sendPhoto.titleLabel?.text =
+        
+        //print ( sendPhoto.frame)
+        
+		
+        sendPhoto.setTitle("Send Photo", forState:UIControlState.Normal)
+        sendStory.setTitle("Send Story", forState:UIControlState.Normal)
+        help.setTitle("Help", forState:UIControlState.Normal)
+        terms.setTitle("Terms of use", forState:UIControlState.Normal)
+        privacy.setTitle("Privacy", forState:UIControlState.Normal)
+        
 		sendPhoto.titleLabel?.font = UIFont.boldSystemFontOfSize(13)
 		sendStory.titleLabel?.font = UIFont.boldSystemFontOfSize(13)
 		help.titleLabel?.font = UIFont.boldSystemFontOfSize(13)
 		terms.titleLabel?.font = UIFont.boldSystemFontOfSize(13)
 		privacy.titleLabel?.font = UIFont.boldSystemFontOfSize(13)
 
-		let dateComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear, fromDate: NSDate())
+		let dateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.NSYearCalendarUnit, fromDate: NSDate())
 		copyright.text = "BBC © \(dateComponents.year)"
 		copyright.font = UIFont.boldSystemFontOfSize(12)
 		copyright.textColor = UIColor.whiteColor()
@@ -166,27 +172,30 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 		let viewsDictionary = ["firstRow" : firstRow, "secondRow" : secondRow, "thirdRow" : thirdRow, "sendPhoto" : sendPhoto, "sendStory" : sendStory, "help" : help, "terms" : terms, "privacy" : privacy, "copyright" : copyright]
 
-		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[firstRow]-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[secondRow]-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[thirdRow]-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==8)-[firstRow(==44)]-(==8)-[secondRow(==44)]-(==8)-[thirdRow(==26)]-(==8)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[firstRow]-|", options: [], metrics: nil, views: viewsDictionary))
+		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[secondRow]-|", options: [], metrics: nil, views: viewsDictionary))
+		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[thirdRow]-|", options: [], metrics: nil, views: viewsDictionary))
+		footer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==8)-[firstRow(==44)]-(==8)-[secondRow(==44)]-(==8)-[thirdRow(==26)]-(==8)-|", options: [], metrics: nil, views: viewsDictionary))
 
-		firstRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[sendPhoto]-[sendStory]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		firstRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[sendPhoto]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		firstRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[sendStory]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+        
+		firstRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[sendPhoto]-[sendStory]|", options: [], metrics: nil, views: viewsDictionary))
+		firstRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[sendPhoto]|", options: [], metrics: nil, views: viewsDictionary))
+		firstRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[sendStory]|", options: [], metrics: nil, views: viewsDictionary))
 
-		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[help]-[terms]-[privacy]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[help]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[terms]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[privacy]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[help]-[terms]-[privacy]|", options: [], metrics: nil, views: viewsDictionary))
+		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[help]|", options: [], metrics: nil, views: viewsDictionary))
+		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[terms]|", options: [], metrics: nil, views: viewsDictionary))
+		secondRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[privacy]|", options: [], metrics: nil, views: viewsDictionary))
+        
 
-		thirdRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[copyright]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		thirdRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[copyright]-|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		thirdRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[copyright]|", options: [], metrics: nil, views: viewsDictionary))
+		thirdRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[copyright]-|", options: [], metrics: nil, views: viewsDictionary))
 
-		firstRow.addConstraint(NSLayoutConstraint(item: sendPhoto, attribute: .Width, relatedBy: .Equal, toItem: sendStory, attribute: .Width, multiplier: 1, constant: 0))
+        
+		firstRow.addConstraint(NSLayoutConstraint(item: sendPhoto, attribute: .Width, relatedBy: .Equal, toItem: sendStory, attribute: .Width, multiplier: 1, constant: 0 ))
 		secondRow.addConstraint(NSLayoutConstraint(item: terms, attribute: .Width, relatedBy: .Equal, toItem: help, attribute: .Width, multiplier: 1, constant: 0))
 		secondRow.addConstraint(NSLayoutConstraint(item: privacy, attribute: .Width, relatedBy: .Equal, toItem: help, attribute: .Width, multiplier: 1, constant: 0))
-
+        
 		tableView.tableFooterView = footer
 	}
 
@@ -200,7 +209,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 			let logoView = UIImageView(image: UIImage(named: "Top Bar Logo"))
 			logoView.tag = 0xDEADBEEF
 			logoView.center = CGPointMake(navigationController?.navigationBar.center.x ?? 0, navigationController!.navigationBar.frame.size.height / 2)
-			logoView.autoresizingMask = .FlexibleLeftMargin | .FlexibleRightMargin
+			logoView.autoresizingMask = UIViewAutoresizing.FlexibleRightMargin
 			navigationController?.navigationBar.addSubview(logoView)
 		}
 
@@ -259,20 +268,26 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 	}
 
 	func watchLiveTapped() {
-		var err: NSErrorPointer = nil
-		let url: NSString! = NSString(contentsOfURL: NSURL(string: "http://www.bbc.co.uk/moira/avstream/iphone/urn:news:news.bbc.co.uk:newschannel/wifi"), usedEncoding: nil, error: err)
-
+		
+        do {
+        let err: NSErrorPointer = nil
+		let url: NSString! =  try NSString(contentsOfURL: NSURL(string: "http://www.bbc.co.uk/moira/avstream/iphone/urn:news:news.bbc.co.uk:newschannel/wifi")!, usedEncoding: nil)
+        
 		if err != nil || url == nil {
 			let ac = UIAlertController(title: "Playback error", message: "There was a problem connecting to the live stream; please check your connection and try again.", preferredStyle: .Alert)
 			ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
 			presentViewController(ac, animated: true, completion: nil)
 			return
-		}
+            }
 
 		if url != "" {
-			let vc = MPMoviePlayerViewController(contentURL: NSURL(string: url))
+			let vc = MPMoviePlayerViewController(contentURL: NSURL(string: url as String))
 			presentMoviePlayerViewControllerAnimated(vc)
 		}
+            
+        } catch {
+            
+        }
 	}
 
 	override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -286,22 +301,27 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 	}
 
 	func cleanUpStaleImages() {
+        
+        do {
 		let fm = NSFileManager.defaultManager()
 
-		if let allSavedFiles = fm.contentsOfDirectoryAtPath(getDocumentsDirectory(), error: nil) as? [String] {
+		if let allSavedFiles = try fm.contentsOfDirectoryAtPath(getDocumentsDirectory().absoluteString) as? [String] {
 			for path in allSavedFiles {
-				let fullPath = getDocumentsDirectory().stringByAppendingPathComponent(path)
-
-				if var attributes = fm.attributesOfItemAtPath(fullPath, error: nil) {
-					let lastModifiedDate = attributes[NSFileModificationDate] as NSDate
+				let fullPath = getDocumentsDirectory().URLByAppendingPathComponent(path).absoluteString
+                let attributes = try fm.attributesOfItemAtPath(fullPath)
+			
+					let lastModifiedDate = try attributes[NSFileModificationDate] as! NSDate
 
 					// if this image is over seven days old, delete it
 					if abs(lastModifiedDate.timeIntervalSinceNow) > 86400 * 7  {
-						fm.removeItemAtPath(fullPath, error: nil)
+						try fm.removeItemAtPath(fullPath)
 					}
-				}
+				
 			}
 		}
+        } catch {
+            
+        }
 	}
 
 	func updateLastUpdatedText() {
@@ -385,35 +405,35 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 	override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		tickerView = UITableViewHeaderFooterView(frame: CGRectMake(0, 0, tableView.frame.size.width, 36))
-		tickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		tickerView.translatesAutoresizingMaskIntoConstraints = false
 		tickerView.contentView.backgroundColor = UIColor.beebTickerGrey()
 
 		tickerContainer = UIView()
-		tickerContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
+		tickerContainer.translatesAutoresizingMaskIntoConstraints = false
 		tickerContainer.backgroundColor = UIColor.beebTickerGrey()
 		tickerContainer.alpha = 0
 		tickerView.contentView.addSubview(tickerContainer)
 
 		tickerText = UILabel()
-		tickerText.setTranslatesAutoresizingMaskIntoConstraints(false)
+		tickerText.translatesAutoresizingMaskIntoConstraints = false
 		tickerText.numberOfLines = 2
 		tickerContainer.addSubview(tickerText)
 		tickerText.preferredMaxLayoutWidth = tickerView.frame.size.width - 24
 
 		tickerArrow = UIImageView(image: UIImage(named: "Ticker Arrow Dark"))
-		tickerArrow.setTranslatesAutoresizingMaskIntoConstraints(false)
+		tickerArrow.translatesAutoresizingMaskIntoConstraints = false
 		tickerContainer.addSubview(tickerArrow)
 
 		let viewsDictionary = ["tickerContainer" : tickerContainer, "tickerText" : tickerText, "tickerArrow" : tickerArrow]
 
-		tickerView.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[tickerContainer]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		tickerView.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[tickerContainer]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		tickerView.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[tickerContainer]|", options: [], metrics: nil, views: viewsDictionary))
+		tickerView.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[tickerContainer]|", options: [], metrics: nil, views: viewsDictionary))
 
-		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==6)-[tickerText]-(>=6)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==2)-[tickerText]-(==2)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==6)-[tickerText]-(>=6)-|", options: [], metrics: nil, views: viewsDictionary))
+		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==2)-[tickerText]-(==2)-|", options: [], metrics: nil, views: viewsDictionary))
 
-		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=2)-[tickerArrow]-(==6)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=2)-[tickerArrow]-(==3)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=2)-[tickerArrow]-(==6)-|", options: [], metrics: nil, views: viewsDictionary))
+		tickerContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=2)-[tickerArrow]-(==3)-|", options: [], metrics: nil, views: viewsDictionary))
 
 		let recognizer = UITapGestureRecognizer(target: self, action: Selector("tickerTapped"))
 		tickerContainer.addGestureRecognizer(recognizer)
@@ -422,7 +442,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 	}
 
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("Section", forIndexPath: indexPath) as SectionCell
+		let cell = tableView.dequeueReusableCellWithIdentifier("Section", forIndexPath: indexPath) as! SectionCell
 		cell.parentViewController = self
 
 		let sectionNumber = indexPath.row
@@ -492,8 +512,11 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 	// MARK: - Ticker
 	func tickerTapped() {
-		if tickerItems == nil { return }
-		if sections == nil { return }
+		if tickerItems == nil  { return }
+        if sections == nil { return }
+        if tickerItems.count == 0  { return }
+        if sections.count == 0  { return }
+		
 
 		let tickerItem = tickerItems[self.tickerPosition]
 
@@ -512,26 +535,29 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 			self.tickerContainer.alpha = 0
 		}) { (finished) in
 			++self.tickerPosition
-			if self.tickerPosition >= self.tickerItems.count { self.tickerPosition = 0 }
+            if self.tickerItems.count > 0 {
+                
+            if self.tickerPosition >= self.tickerItems.count { self.tickerPosition = 0 }
 
 			let tickerItem = self.tickerItems[self.tickerPosition]
 
-			self.setTickerItem(tickerItem)
+			self.tickerItem(tickerItem)
+            }
 
-			UIView.animateWithDuration(0.2, delay: 0.2, options: .allZeros, animations: { () -> Void in
+			UIView.animateWithDuration(0.2, delay: 0.2, options: [], animations: { () -> Void in
 				self.tickerContainer.alpha = 1
 			}, completion:nil)
 		}
 	}
 
 	func updateTicker() -> Bool {
-		var err: NSErrorPointer = nil
-		let tickerString: NSString! = NSString(contentsOfURL: NSURL(string: "http://polling.bbc.co.uk/moira/ticker/uk"), usedEncoding: nil, error: err)
+		let err: NSErrorPointer = nil
+		let tickerString: NSString! = try! NSString(contentsOfURL: NSURL(string: "http://polling.bbc.co.uk/moira/ticker/uk")!, usedEncoding: nil)
 
 		if err != nil || tickerString == nil || tickerString.length == 0 { return false }
 
 		if let data = tickerString.dataUsingEncoding(NSUTF8StringEncoding) {
-			let json = NSJSONSerialization.JSONObjectWithData(data, options: .allZeros, error: err) as NSDictionary
+			let json = try! NSJSONSerialization.JSONObjectWithData(data, options: []) as! NSDictionary
 
 			if let entries = json["entries"] as? [[String : String]] {
 				tickerItems.removeAll(keepCapacity: true)
@@ -551,7 +577,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		return true
 	}
 
-	func setTickerItem(item: TickerItem) {
+	func tickerItem(item: TickerItem) {
 		if item.isBreaking == "true" {
 			let attrsTitle = [NSFontAttributeName : UIFont.boldSystemFontOfSize(13), NSForegroundColorAttributeName : UIColor.whiteColor()]
 			let attrsText = [NSFontAttributeName : UIFont.systemFontOfSize(13), NSForegroundColorAttributeName : UIColor.whiteColor()]
@@ -581,11 +607,11 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 	// MARK: - Story loading
 	func createSections() {
-		var cachedSections = unarchiveDiskArray(getDocumentsDirectory().stringByAppendingPathComponent("cachedSections")) as [AnyObject]
-		var cachedTicker = unarchiveDiskArray(getDocumentsDirectory().stringByAppendingPathComponent("cachedTicker")) as [AnyObject]
+		let cachedSections = unarchiveDiskArray(getDocumentsDirectory().URLByAppendingPathComponent("cachedSections").absoluteString) as [AnyObject]
+		let cachedTicker = unarchiveDiskArray(getDocumentsDirectory().URLByAppendingPathComponent("cachedTicker").absoluteString) as [AnyObject]
 
 		if cachedSections.count > 0 {
-			sections = cachedSections as [Section]
+			sections = cachedSections as! [Section]
 		} else {
 			sections = [Section]()
 
@@ -610,7 +636,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 
 		if cachedTicker.count > 0 {
-			tickerItems = cachedTicker as [TickerItem]
+			tickerItems = cachedTicker as! [TickerItem]
 		}
 	}
 
@@ -689,8 +715,8 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 
 	func saveCachedStories() {
 		if sections == nil || tickerItems == nil { return }
-		archiveDiskArray(getDocumentsDirectory().stringByAppendingPathComponent("cachedSections"), sections)
-		archiveDiskArray(getDocumentsDirectory().stringByAppendingPathComponent("cachedTicker"), tickerItems)
+		archiveDiskArray(getDocumentsDirectory().URLByAppendingPathComponent("cachedSections").absoluteString, array: sections)
+		archiveDiskArray(getDocumentsDirectory().URLByAppendingPathComponent("cachedTicker").absoluteString, array: tickerItems)
 	}
 
 	func showStory(story: Story) {
@@ -701,9 +727,9 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		// on the left while you're reading on the right, but this doesn't exist on iPhone and the red vbar
 		// is therefore redundant. However, in the interests of accuracy, it has been reproduced here…
 
-		let visibleCells = tableView.visibleCells()
+		let visibleCells = tableView.visibleCells
 
-		for visibleCell in visibleCells as [SectionCell] {
+		for visibleCell in visibleCells as! [SectionCell] {
 			visibleCell.highlightStory(story)
 		}
 		
@@ -717,7 +743,7 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 	// MARK: - Table footer button
 
 	func sendPhotoTapped() {
-		let imagePicker = UIImagePickerController()
+        let imagePicker = UIImagePickerController()
 		imagePicker.allowsEditing = false
 		imagePicker.delegate = self
 		imagePicker.sourceType = .PhotoLibrary
@@ -740,22 +766,22 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 	}
 
 	func helpTapped() {
-		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bbc.co.uk/news/help-21770562"))
+		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bbc.co.uk/news/help-21770562")!)
 	}
 
 	func termsTapped() {
-		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bbc.co.uk/terms/"))
+		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bbc.co.uk/terms/")!)
 	}
 
 	func privacyTapped() {
-		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bbc.co.uk/privacy"))
+		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bbc.co.uk/privacy")!)
 	}
 
 	func sendStoryByEmail(action: UIAlertAction!) {
 		if MFMailComposeViewController.canSendMail() {
 			let vc = MFMailComposeViewController()
 			vc.mailComposeDelegate = self
-			vc.setToRecipients(["talkingpoint@bbc.co.uk"])
+			//vc.toRecipients = ["talkingpoint@bbc.co.uk"]
 			vc.setSubject("Sent from Better Beeb iPhone app")
 			vc.setMessageBody("Sent from Better Beeb iPhone app", isHTML: false)
 			presentViewController(vc, animated: true, completion: nil)
@@ -779,18 +805,18 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		}
 	}
 
-	func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+	func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
 		picker.dismissViewControllerAnimated(true, completion: nil)
 
 		if let img = info["UIImagePickerControllerOriginalImage"] as? UIImage {
 			let vc = MFMailComposeViewController()
 			vc.mailComposeDelegate = self
-			vc.setToRecipients(["talkingpoint@bbc.co.uk"])
+			//vc.toRecipients(["talkingpoint@bbc.co.uk"])
 			vc.setSubject("Sent from Better Beeb iPhone app")
 			vc.setMessageBody("Sent from Better Beeb iPhone app", isHTML: false)
 
-			let imageData = UIImagePNGRepresentation(img)
-			vc.addAttachmentData(imageData, mimeType: "image/png", fileName: "photo.png")
+			_ = UIImagePNGRepresentation(img)
+			//vc.addAttachmentData(imageData, mimeType: "image/png", fileName: "photo.png")
 
 			presentViewController(vc, animated: true, completion: nil)
 		}
@@ -805,11 +831,11 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
 	}
 
-	func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+	func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
 		controller.dismissViewControllerAnimated(true, completion: nil)
 	}
 
-	func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+	func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
 		controller.dismissViewControllerAnimated(true, completion: nil)
 	}
 }

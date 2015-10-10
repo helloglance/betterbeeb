@@ -1,3 +1,4 @@
+
 //
 //  SectionCell.swift
 //  BetterBeeb
@@ -48,10 +49,10 @@ class SectionCell: UITableViewCell, UICollectionViewDataSource, UICollectionView
 		leftLabel = UILabel()
 		rightLabel = UILabel()
 
-		topRow.setTranslatesAutoresizingMaskIntoConstraints(false)
-		bottomRow.setTranslatesAutoresizingMaskIntoConstraints(false)
-		leftLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-		rightLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topRow.translatesAutoresizingMaskIntoConstraints = false;
+        bottomRow.translatesAutoresizingMaskIntoConstraints = false;
+        leftLabel.translatesAutoresizingMaskIntoConstraints = false;
+        rightLabel.translatesAutoresizingMaskIntoConstraints = false;
 
 		rightLabel.textAlignment = .Right
 
@@ -61,7 +62,7 @@ class SectionCell: UITableViewCell, UICollectionViewDataSource, UICollectionView
 		flowLayout.scrollDirection = .Horizontal
 
 		collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
-		collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		collectionView.translatesAutoresizingMaskIntoConstraints = false
 
 		collectionView.delegate = self
 		collectionView.dataSource = self
@@ -87,26 +88,24 @@ class SectionCell: UITableViewCell, UICollectionViewDataSource, UICollectionView
 
 		let viewsDictionary = ["topRow" : topRow, "bottomRow" : bottomRow, "leftLabel" : leftLabel, "rightLabel" : rightLabel, "collectionView" : collectionView]
 
-		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==6)-[leftLabel]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==8)-[leftLabel]-(==8)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[rightLabel]-(==6)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==8)-[rightLabel]-(==8)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==6)-[leftLabel]|", options: [], metrics: nil, views: viewsDictionary))
+		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==8)-[leftLabel]-(==8)-|", options: [], metrics: nil, views: viewsDictionary))
+		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[rightLabel]-(==6)-|", options: [], metrics: nil, views: viewsDictionary))
+		topRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(==8)-[rightLabel]-(==8)-|", options: [], metrics: nil, views: viewsDictionary))
 
-		bottomRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[collectionView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		bottomRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView(==134)]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		bottomRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[collectionView]|", options: [], metrics: nil, views: viewsDictionary))
+		bottomRow.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView(==134)]|", options: [], metrics: nil, views: viewsDictionary))
 
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[topRow]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bottomRow]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[topRow][bottomRow]|", options: .allZeros, metrics: nil, views: viewsDictionary))		
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[topRow]|", options: [], metrics: nil, views: viewsDictionary))
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bottomRow]|", options: [], metrics: nil, views: viewsDictionary))
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[topRow][bottomRow]|", options: [], metrics: nil, views: viewsDictionary))		
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
+		super.init(coder: aDecoder)!
 	}
 
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-	}
+	
 
 	func setSectionTitle(str: String) {
 		let attrs = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont.boldSystemFontOfSize(16)]
@@ -128,16 +127,16 @@ class SectionCell: UITableViewCell, UICollectionViewDataSource, UICollectionView
 	}
 
 	func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Story", forIndexPath: indexPath) as StoryCell
+		let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Story", forIndexPath: indexPath) as! StoryCell
 
 		let story = section.stories[indexPath.item]
-		cell.setStory(story)
+		cell.SetStory(story)
 
 		if parentViewController.selectedStoryID != nil && parentViewController.selectedStoryID == story.id {
 			cell.setHighlightedStory(true)
 		} else {
 			cell.setHighlightedStory(false)
-		}
+        }
 
 		return cell
 	}
@@ -160,7 +159,7 @@ class SectionCell: UITableViewCell, UICollectionViewDataSource, UICollectionView
 	}
 
 	func highlightStory(highlighted: Story) {
-		let visibleCells = collectionView.visibleCells() as [StoryCell]
+		let visibleCells = collectionView.visibleCells() as! [StoryCell]
 
 		for cell in visibleCells {
 			if cell.story.id == highlighted.id {

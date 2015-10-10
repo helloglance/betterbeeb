@@ -131,7 +131,7 @@ window.addEventListener("load", function () {
                     //In the case of a video, it's the grand parent that's not displayed.
                     if (image.parentNode && image.parentNode.parentNode) {
                         displayElement(image.parentNode.parentNode);
-                        image.parentNode.className = "has-avcontent";//Used for setting height (in css).
+                        image.parentNode.className = "has-avcontent";//Used for ting height (in css).
                     }
 
                     mediaType = elementIsVideo ? "video" : "audio";

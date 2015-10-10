@@ -33,7 +33,7 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 	var id: String!
 	var linkHref: String!
 	var linkTitle: String!
-	var thumbnail: String!
+	var thumbnail: NSURL!
 	var content: String!
 
 	weak var section: Section!
@@ -51,15 +51,16 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		title = aDecoder.decodeObjectForKey("title") as String
-		summary = aDecoder.decodeObjectForKey("summary") as String
-		category = aDecoder.decodeObjectForKey("category") as String
-		updated = aDecoder.decodeObjectForKey("updated") as NSDate
-		id = aDecoder.decodeObjectForKey("id") as String
-		linkHref = aDecoder.decodeObjectForKey("linkHref") as String
-		linkTitle = aDecoder.decodeObjectForKey("linkTitle") as String
-		thumbnail = aDecoder.decodeObjectForKey("thumbnail") as String
-		content = aDecoder.decodeObjectForKey("content") as String
+		title = aDecoder.decodeObjectForKey("title") as! String
+		summary = aDecoder.decodeObjectForKey("summary") as! String
+		category = aDecoder.decodeObjectForKey("category") as! String
+		updated = aDecoder.decodeObjectForKey("updated") as! NSDate
+		id = aDecoder.decodeObjectForKey("id") as! String
+		linkHref = aDecoder.decodeObjectForKey("linkHref") as! String
+		linkTitle = aDecoder.decodeObjectForKey("linkTitle") as! String
+		thumbnail =  aDecoder.decodeObjectForKey("thumbnail") as! NSURL
+        
+		content = aDecoder.decodeObjectForKey("content") as! String
 	}
 
 	func encodeWithCoder(aCoder: NSCoder) {
@@ -75,17 +76,17 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 
 	}
 
-	func parser(parser: NSXMLParser, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+	 func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
 		if (elementName == "link") {
-			linkHref = (attributeDict["href"] as AnyObject?) as String
-			linkTitle = (attributeDict["title"] as AnyObject?) as String
+			linkHref = (attributeDict["href"] as AnyObject??) as! String
+			linkTitle = (attributeDict["title"] as AnyObject??) as! String
 		} else if (elementName == "media:thumbnail") {
-			let originalURL = (attributeDict["url"] as AnyObject?) as NSString
-			thumbnail = cleanImageURL(originalURL)
+			let originalURL = (attributeDict["url"] as AnyObject??) as! NSString
+            thumbnail = NSURL(string:cleanImageURL(originalURL))
 		}
 	}
 
-	func parser(parser: NSXMLParser, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
+	func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 		switch elementName {
 		case "title":
 			title = currentText.trim()
@@ -121,13 +122,13 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 		case "content":
 			var parsedString = currentText.trim() as NSString
 
-			let imageDeviceRegex = NSRegularExpression(pattern: "(bbcimage://.*)(%7bdevice%7d)(.*)", options: NSRegularExpressionOptions.AllowCommentsAndWhitespace, error: nil)
-			parsedString = imageDeviceRegex.stringByReplacingMatchesInString(parsedString, options: .allZeros, range: NSMakeRange(0, parsedString.length), withTemplate: "$1iphone-retina$3")
+			let imageDeviceRegex = try! NSRegularExpression(pattern: "(bbcimage://.*)(%7bdevice%7d)(.*)", options: NSRegularExpressionOptions.AllowCommentsAndWhitespace)
+			parsedString = imageDeviceRegex.stringByReplacingMatchesInString(parsedString as String, options: [], range: NSMakeRange(0, parsedString.length), withTemplate: "$1iphone-retina$3")
 
-			let imageRegex = NSRegularExpression(pattern: "bbcimage://[^/]+", options: NSRegularExpressionOptions.AllowCommentsAndWhitespace, error: nil)
-			parsedString = imageRegex.stringByReplacingMatchesInString(parsedString, options: .allZeros, range: NSMakeRange(0, parsedString.length), withTemplate: "http:/$1")
+			let imageRegex = try! NSRegularExpression(pattern: "bbcimage://[^/]+", options: NSRegularExpressionOptions.AllowCommentsAndWhitespace)
+			parsedString = imageRegex.stringByReplacingMatchesInString(parsedString as String, options: [], range: NSMakeRange(0, parsedString.length), withTemplate: "http:/$1")
 
-			content = parsedString
+			content = parsedString as String
 
 			currentText = ""
 			break

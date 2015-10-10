@@ -42,10 +42,10 @@ class StoryCell: UICollectionViewCell {
 		titleContainer = UIView()
 		highlight = UIView()
 
-		imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-		title.setTranslatesAutoresizingMaskIntoConstraints(false)
-		titleContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
-		highlight.setTranslatesAutoresizingMaskIntoConstraints(false)
+		imageView.translatesAutoresizingMaskIntoConstraints = false
+		title.translatesAutoresizingMaskIntoConstraints = false
+		titleContainer.translatesAutoresizingMaskIntoConstraints = false
+		highlight.translatesAutoresizingMaskIntoConstraints = false
 		highlight.backgroundColor = UIColor.blackColor()
 
 		imageView.contentMode = .ScaleAspectFill
@@ -60,21 +60,21 @@ class StoryCell: UICollectionViewCell {
 		contentView.addSubview(highlight)
 
 		let viewsDictionary = ["imageView" : imageView, "title" : title, "titleContainer" : titleContainer, "highlight" : highlight]
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[imageView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==4)-[titleContainer]-(==4)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[highlight]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[imageView(==72)]-(==2)-[titleContainer(>=52)][highlight(==8)]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[imageView]|", options: [], metrics: nil, views: viewsDictionary))
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(==4)-[titleContainer]-(==4)-|", options: [], metrics: nil, views: viewsDictionary))
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[highlight]|", options: [], metrics: nil, views: viewsDictionary))
+		contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[imageView(==72)]-(==2)-[titleContainer(>=52)][highlight(==8)]|", options: [], metrics: nil, views: viewsDictionary))
 
-		titleContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[title]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-		titleContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[title]-(>=0)-|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		titleContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[title]|", options: [], metrics: nil, views: viewsDictionary))
+		titleContainer.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[title]-(>=0)-|", options: [], metrics: nil, views: viewsDictionary))
 		title.setContentHuggingPriority(1000, forAxis: .Vertical)
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
+		super.init(coder: aDecoder)!
 	}
 
-	func setStory(story: Story) {
+	func SetStory(story: Story) {
 		self.story = story
 
 		let attrs = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont.systemFontOfSize(14)]
@@ -83,22 +83,24 @@ class StoryCell: UICollectionViewCell {
 		imageView.image = nil
 
 		var fm = NSFileManager.defaultManager()
-		var thumbnailFilename = getDocumentsDirectory().stringByAppendingPathComponent("img-\(story.thumbnail.lastPathComponent)")
+        if(story.thumbnail != nil) {
+		var thumbnailFilename = getDocumentsDirectory().URLByAppendingPathComponent("img-\(story.thumbnail.lastPathComponent)")
 
-		if fm.fileExistsAtPath(thumbnailFilename) {
-			let thumbnailImage = UIImage(contentsOfFile: thumbnailFilename)
+		if fm.fileExistsAtPath(thumbnailFilename.absoluteString) {
+			let thumbnailImage = UIImage(contentsOfFile: thumbnailFilename.absoluteString)
 			self.imageView.image = thumbnailImage
 		} else {
-			downloadImage(NSURL(string: story.thumbnail)) { [weak self] image, error in
+			downloadImage(story.thumbnail!) { [weak self] image, error in
 				if self == nil { return }
 				if error != nil { return }
 				
 				self?.imageView.image = image
 
 				let imageData = UIImageJPEGRepresentation(image, 95)
-				imageData.writeToFile(thumbnailFilename, atomically: true)
+				imageData!.writeToFile(thumbnailFilename.absoluteString, atomically: true)
 			}
 		}
+        }
 	}
 
 	func setHighlightedStory(highlighted: Bool) {

@@ -43,12 +43,12 @@ class TickerItem : NSObject, NSCoding {
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		id = aDecoder.decodeObjectForKey("id") as String
-		headline = aDecoder.decodeObjectForKey("headline") as String
-		prompt = aDecoder.decodeObjectForKey("prompt") as String
-		url = aDecoder.decodeObjectForKey("url") as String
-		isLive = aDecoder.decodeObjectForKey("isLive") as String
-		isBreaking = aDecoder.decodeObjectForKey("isBreaking") as String
+		id = aDecoder.decodeObjectForKey("id") as! String
+		headline = aDecoder.decodeObjectForKey("headline") as! String
+		prompt = aDecoder.decodeObjectForKey("prompt") as! String
+		url = aDecoder.decodeObjectForKey("url") as! String
+		isLive = aDecoder.decodeObjectForKey("isLive") as! String
+		isBreaking = aDecoder.decodeObjectForKey("isBreaking") as! String
 	}
 
 	func encodeWithCoder(aCoder: NSCoder) {

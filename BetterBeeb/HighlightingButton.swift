@@ -29,9 +29,10 @@ class HighlightingButton: UIButton {
 	var offColor: UIColor!
 	var onColor: UIColor!
 
-	init(off: UIColor, on: UIColor) {
-		super.init()
-
+	  init(off: UIColor, on: UIColor) {
+        //let frame = CGRectMake(0.0, 0.0, 0.0, 0.0)
+        super.init(frame:CGRectZero)
+        
 		offColor = off
 		onColor = on
 
@@ -43,7 +44,7 @@ class HighlightingButton: UIButton {
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
+		super.init(coder: aDecoder)!
 	}
 
 	override var highlighted: Bool {

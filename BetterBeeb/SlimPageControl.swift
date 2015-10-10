@@ -26,17 +26,17 @@
 import UIKit
 
 class SlimPageControl: UIPageControl {
-	override init() {
-		super.init()
-		self.backgroundColor = UIColor.clearColor()
-	}
-
+	
 	override init(frame: CGRect) {
+       
 		super.init(frame: frame)
+         self.backgroundColor = UIColor.clearColor()
 	}
 
 	required init(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
+       
+		super.init(coder: aDecoder)!
+         self.backgroundColor = UIColor.clearColor()
 	}
 
 	override func layoutSubviews() {
