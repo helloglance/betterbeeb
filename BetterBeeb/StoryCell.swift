@@ -82,9 +82,9 @@ class StoryCell: UICollectionViewCell {
 
 		imageView.image = nil
 
-		var fm = NSFileManager.defaultManager()
+		let fm = NSFileManager.defaultManager()
         if(story.thumbnail != nil) {
-		var thumbnailFilename = getDocumentsDirectory().URLByAppendingPathComponent("img-\(story.thumbnail.lastPathComponent)")
+		let thumbnailFilename = getDocumentsDirectory().URLByAppendingPathComponent("img-\(story.thumbnail.lastPathComponent)")
 
 		if fm.fileExistsAtPath(thumbnailFilename.absoluteString) {
 			let thumbnailImage = UIImage(contentsOfFile: thumbnailFilename.absoluteString)

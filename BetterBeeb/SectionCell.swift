@@ -146,7 +146,7 @@ class SectionCell: UITableViewCell, UICollectionViewDataSource, UICollectionView
 	}
 
 	func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-		var visibleWidth = 10 + flowLayout.itemSize.width
+		let visibleWidth = 10 + flowLayout.itemSize.width
 		let indexOfItemToSnap: Int = Int(round(targetContentOffset.memory.x / visibleWidth))
 
 		if (targetContentOffset.memory.x >= scrollView.contentSize.width - scrollView.bounds.size.width) {

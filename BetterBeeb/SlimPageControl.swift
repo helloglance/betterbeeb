@@ -56,14 +56,14 @@ class SlimPageControl: UIPageControl {
 		CGContextSaveGState(context)
 		CGContextSetAllowsAntialiasing(context, true)
 
-		var dotSize = 7
-		var dotSpacing = 6
-		var dotY = (self.frame.size.height - CGFloat(dotSize)) / 2
-		var dotsWidth = (dotSize * self.numberOfPages) + (self.numberOfPages - 1) * dotSpacing
-		var offset = (self.frame.size.width - CGFloat(dotsWidth)) / 2
+		let dotSize = 7
+		let dotSpacing = 6
+		let dotY = (self.frame.size.height - CGFloat(dotSize)) / 2
+		let dotsWidth = (dotSize * self.numberOfPages) + (self.numberOfPages - 1) * dotSpacing
+		let offset = (self.frame.size.width - CGFloat(dotsWidth)) / 2
 
 		for (var i = 0; i < self.numberOfPages; i++) {
-			var dotRect = CGRectMake(offset + (CGFloat(dotSize) + CGFloat(dotSpacing)) * CGFloat(i), dotY, CGFloat(dotSize), CGFloat(dotSize))
+			let dotRect = CGRectMake(offset + (CGFloat(dotSize) + CGFloat(dotSpacing)) * CGFloat(i), dotY, CGFloat(dotSize), CGFloat(dotSize))
 			
 			if (i == self.currentPage) {
 				CGContextSetFillColorWithColor(context, currentPageIndicatorTintColor?.CGColor)

@@ -158,7 +158,7 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 		pasteboard.URL = NSURL(string: story.linkHref)
 	}
 
-	 func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+	 func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?){
 		controller.dismissViewControllerAnimated(true, completion: nil)
 	}
 
@@ -192,7 +192,7 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 		return nil
 	}
 
-	func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject?], transitionCompleted completed: Bool) {
+	func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool){
 		if !completed { return }
 
 		let currentVC = self.pageController.viewControllers!.last as! ReaderContentViewController

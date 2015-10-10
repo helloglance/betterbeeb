@@ -85,7 +85,7 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 		contents = contents.stringByReplacingOccurrencesOfString("</content>", withString: "]]></content>")
 
 		if let contentsData = contents.dataUsingEncoding(NSUTF8StringEncoding) {
-			var xmlParser = NSXMLParser(data: contentsData)
+			let xmlParser = NSXMLParser(data: contentsData)
 			xmlParser.delegate = self
 
 			self.tempStories = [Story]()

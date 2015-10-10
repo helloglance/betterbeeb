@@ -52,16 +52,16 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 
 		let template = stringFromResource("template.html")
 
-		var titleString = "<h1>\(story.title)</h1>"
+		let titleString = "<h1>\(story.title)</h1>"
 		var formattedDate: String! = nil
 
-		var timeSincePublished = NSDate().timeIntervalSinceDate(story.updated)
+		let timeSincePublished = NSDate().timeIntervalSinceDate(story.updated)
 
 		if timeSincePublished < 60 * 60 * 9 {
-			var roundedHours = Int(floor(timeSincePublished / (60 * 60)))
+			let roundedHours = Int(floor(timeSincePublished / (60 * 60)))
 
 			if roundedHours == 0 {
-				var roundedMinutes = Int(floor(timeSincePublished / 60))
+				let roundedMinutes = Int(floor(timeSincePublished / 60))
 
 				if roundedMinutes == 0 {
 					formattedDate = "moments ago"
@@ -113,7 +113,7 @@ class ReaderContentViewController: UIViewController, UIWebViewDelegate {
 				url = url.stringByReplacingOccurrencesOfString("%7bdevice%7d", withString: "iphone")
 				url = url.stringByReplacingOccurrencesOfString("%7bbandwidth%7d", withString: "wifi")
 
-				var err: NSErrorPointer = nil
+				let err: NSErrorPointer = nil
 				let str: NSString! = try! String(contentsOfURL: NSURL(string: url as String)!, usedEncoding: nil)
 
 				if err != nil || str == nil {

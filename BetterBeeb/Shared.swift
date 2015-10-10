@@ -97,7 +97,7 @@ func getDocumentsDirectory() -> NSURL {
 
 
 func unarchiveDiskArray(filename: String) -> NSArray {
-	var savedData: NSData! = NSData(contentsOfFile: filename)
+	let savedData: NSData! = NSData(contentsOfFile: filename)
 
 	if (savedData != nil) {
 		if let array = NSKeyedUnarchiver.unarchiveObjectWithData(savedData) as? NSArray {
