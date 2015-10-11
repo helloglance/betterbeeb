@@ -66,7 +66,11 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 		isUpdating = true
 
 		let url = NSURL(string: self.feedURL)
-
+    
+        if(self.feedURL == "http://www.buzzfeed.com/news.xml") {
+                
+            print("success")
+        }
 		let err: NSErrorPointer = nil
    
         var contents:NSString
@@ -81,8 +85,11 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 
 		// the BBC feed sends in the story data as XML inline with the story metadata, which is ugly. This hack forces the story
 		// to be treated as character data so we can read it as one lump of XHTML.
+        if (self.feedURL != "http://www.buzzfeed.com/news.xml" ||
+            self.feedURL != "http://www.buzzfeed.com/lol.xml") {
 		contents = contents.stringByReplacingOccurrencesOfString("<content type=\"xhtml\">", withString: "<content type=\"xhtml\"><![CDATA[")
 		contents = contents.stringByReplacingOccurrencesOfString("</content>", withString: "]]></content>")
+            }
 
 		if let contentsData = contents.dataUsingEncoding(NSUTF8StringEncoding) {
 			let xmlParser = NSXMLParser(data: contentsData)
@@ -115,5 +122,12 @@ class Section : NSObject, NSXMLParserDelegate, NSCoding {
 			let story: Story = Story(parentSection: self, parser: parser)
 			tempStories.append(story)
 		}
+        if (self.feedURL == "http://www.buzzfeed.com/news.xml" ||
+            self.feedURL == "http://www.buzzfeed.com/lol.xml") {
+            if(elementName == "item") {
+                let story: Story = Story(parentSection: self, parser: parser)
+                tempStories.append(story)
+            }
+        }
 	}
 }

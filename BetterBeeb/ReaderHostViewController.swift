@@ -126,7 +126,7 @@ class ReaderHostViewController: UIViewController, UIPageViewControllerDataSource
 			vc.mailComposeDelegate = self
 
 			vc.setSubject("BBC News: \(story.title)")
-			let body = "I saw this story on the Better Beeb iPhone app and thought you should see it:\n\n\(story.title)\n\n\(story.summary)\n\nRead more: \(story.linkHref)\n\n\n***Disclaimer***\nThe BBC is not responsible for the content of this e-mail, and anything written in this e-mail does not necessarily reflect the BBC's views or opinions. Please note that neither the e-mail address nor name of the sender have been verified."
+			let body = "I saw this story on the Better Beeb iPhone app and thought you should see it:\n\n\(story.title)\n\nRead more: \(story.linkHref)\n\n\n***Disclaimer***\nThe BBC is not responsible for the content of this e-mail, and anything written in this e-mail does not necessarily reflect the BBC's views or opinions. Please note that neither the e-mail address nor name of the sender have been verified."
 			vc.setMessageBody(body, isHTML: false)
 
 			presentViewController(vc, animated:true, completion: nil)

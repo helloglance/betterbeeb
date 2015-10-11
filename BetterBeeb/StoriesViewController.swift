@@ -134,12 +134,6 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 		terms.titleLabel?.textColor = UIColor.whiteColor()
 		privacy.titleLabel?.textColor = UIColor.whiteColor()
 
-         //sendPhoto.titleLabel?.enabled = true;
-		//sendPhoto.titleLabel?.text =
-        
-        //print ( sendPhoto.frame)
-        
-		
         sendPhoto.setTitle("Send Photo", forState:UIControlState.Normal)
         sendStory.setTitle("Send Story", forState:UIControlState.Normal)
         help.setTitle("Help", forState:UIControlState.Normal)
@@ -616,7 +610,8 @@ class StoriesViewController: UITableViewController, UIImagePickerControllerDeleg
 			sections = [Section]()
 
 			sections.append(Section(title: "Top Stories", url: "http://polling.bbc.co.uk/moira/feed/ukagg/1"))
-			sections.append(Section(title: "World", url: "http://polling.bbc.co.uk/moira/feed/ukagg/2"))
+			sections.append(Section(title: "Buzzfeed News", url: "http://www.buzzfeed.com/news.xml"))
+            sections.append(Section(title: "Buzzfeed LOL", url: "http://www.buzzfeed.com/lol.xml"))
 			sections.append(Section(title: "UK", url: "http://polling.bbc.co.uk/moira/feed/ukagg/3"))
 			sections.append(Section(title: "Sport", url: "http://polling.bbc.co.uk/moira/feed/sport_uk/front_page"))
 			sections.append(Section(title: "England", url: "http://polling.bbc.co.uk/moira/feed/news_uk/england"))

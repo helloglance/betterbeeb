@@ -28,11 +28,10 @@ import Foundation
 class Story : NSObject, NSXMLParserDelegate, NSCoding {
 	var title: String!
 	var summary: String!
-	var category: String!
+
 	var updated: NSDate!
 	var id: String!
 	var linkHref: String!
-	var linkTitle: String!
 	var thumbnail: NSURL!
 	var content: String!
 
@@ -52,25 +51,26 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 
 	required init(coder aDecoder: NSCoder) {
 		title = aDecoder.decodeObjectForKey("title") as! String
-		summary = aDecoder.decodeObjectForKey("summary") as! String
-		category = aDecoder.decodeObjectForKey("category") as! String
+	
 		updated = aDecoder.decodeObjectForKey("updated") as! NSDate
 		id = aDecoder.decodeObjectForKey("id") as! String
 		linkHref = aDecoder.decodeObjectForKey("linkHref") as! String
-		linkTitle = aDecoder.decodeObjectForKey("linkTitle") as! String
+       
 		thumbnail =  aDecoder.decodeObjectForKey("thumbnail") as! NSURL
+        
+        
         
 		content = aDecoder.decodeObjectForKey("content") as! String
 	}
 
 	func encodeWithCoder(aCoder: NSCoder) {
 		aCoder.encodeObject(title, forKey: "title")
-		aCoder.encodeObject(summary, forKey: "summary")
-		aCoder.encodeObject(category, forKey: "category")
+		
+	
 		aCoder.encodeObject(updated, forKey: "updated")
 		aCoder.encodeObject(id, forKey: "id")
 		aCoder.encodeObject(linkHref, forKey: "linkHref")
-		aCoder.encodeObject(linkTitle, forKey: "linkTitle")
+
 		aCoder.encodeObject(thumbnail, forKey: "thumbnail")
 		aCoder.encodeObject(content, forKey: "content")
 
@@ -78,12 +78,19 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 
 	 func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
 		if (elementName == "link") {
+            if( attributeDict.isEmpty == false) {
 			linkHref = (attributeDict["href"] as AnyObject??) as! String
-			linkTitle = (attributeDict["title"] as AnyObject??) as! String
+		
+            }
 		} else if (elementName == "media:thumbnail") {
 			let originalURL = (attributeDict["url"] as AnyObject??) as! NSString
             thumbnail = NSURL(string:cleanImageURL(originalURL))
-		}
+        } else if (elementName == "media:content") {
+            if( attributeDict["url"] != nil) {
+            let originalURL = (attributeDict["url"] as AnyObject??) as! NSString
+            thumbnail = NSURL(string:originalURL as String)
+            }
+        }
 	}
 
 	func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -91,16 +98,11 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 		case "title":
 			title = currentText.trim()
 			currentText = ""
+        case "link":
+            linkHref = currentText;
+            currentText = ""
 
-		case "summary":
-			summary = currentText.trim()
-			currentText = ""
-			break
-
-		case "category":
-			category = currentText.trim()
-			currentText = ""
-			break
+      
 
 		case "updated":
 			let dateFormatter = NSDateFormatter()
@@ -113,11 +115,27 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 
 			currentText = ""
 			break
+            
+        case "pubDate":
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "EE, d LLLL yyyy HH:mm:ss Z"
+            let sourceString = currentText.trim()
+            
+            if let date = dateFormatter.dateFromString(sourceString) {
+                updated = date
+            }
+            currentText = ""
+            break
 
 		case "id":
 			id = currentText.trim()
 			currentText = ""
 			break
+            
+        case "guid":
+            id = currentText.trim()
+            currentText = ""
+            break
 
 		case "content":
 			var parsedString = currentText.trim() as NSString
@@ -132,12 +150,28 @@ class Story : NSObject, NSXMLParserDelegate, NSCoding {
 
 			currentText = ""
 			break
+        case "description":
+            var parsedString = currentText.trim() as NSString
+            
+            let imageDeviceRegex = try! NSRegularExpression(pattern: "(bbcimage://.*)(%7bdevice%7d)(.*)", options: NSRegularExpressionOptions.AllowCommentsAndWhitespace)
+            parsedString = imageDeviceRegex.stringByReplacingMatchesInString(parsedString as String, options: [], range: NSMakeRange(0, parsedString.length), withTemplate: "$1iphone-retina$3")
+            
+            let imageRegex = try! NSRegularExpression(pattern: "bbcimage://[^/]+", options: NSRegularExpressionOptions.AllowCommentsAndWhitespace)
+            parsedString = imageRegex.stringByReplacingMatchesInString(parsedString as String, options: [], range: NSMakeRange(0, parsedString.length), withTemplate: "http:/$1")
+            
+            content = parsedString as String
+            
+            currentText = ""
+            break
 
 		case "entry":
 			parser.delegate = section			
 			currentText = ""
 			break
-
+        case "item":
+            parser.delegate = section
+            currentText = ""
+            break
 		default:
 			currentText = ""
 			break
